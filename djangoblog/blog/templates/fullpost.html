@@ -4,6 +4,7 @@
 <head>
 
     <meta charset="UTF-8">
+
     <link rel="apple-touch-icon" type="image/png"
         href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
     <meta name="apple-mobile-web-app-title" content="CodePen">
@@ -16,14 +17,14 @@
         color="#111" />
 
 
-    <title>Blog</title>
+    <title>{{post.title}}</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"
         type="text/javascript"></script>
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
@@ -37,15 +38,15 @@
         if (document.location.search.match(/type=embed/gi)) {
             window.parent.postMessage("resize", "*");
         }
-        
     </script>
 
 
 </head>
 
-<body>
+<body translate="no">
     {% include 'header.html' %}
-    <br><br>
+    {% load crispy_forms_tags %}
+    <br> <br><br>
     <svg display="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
             <symbol id="icon-bubble" viewBox="0 0 1024 1024">
@@ -62,86 +63,97 @@
             </symbol>
         </defs>
     </svg>
-    {% if posts %}
-
-    
-    
-    <!-- <div class="row"> -->
-        {% for post in posts %}
-        <!-- <div class="col-4" style="width: 30vw;"> -->
-            <div class="blog-container">
-                <div class="blog-header">
-                    <div class="blog-cover" style=" 
-                    background: url('media/{{post.image }}');
-                    background-size: cover;
-                    border-radius: 5px 5px 0 0;
-                    height: 35rem;
-                    box-shadow: inset rgba(0, 0, 0, 0.2) 0 64px 64px 16px;">
-                        <div class="blog-author">
-                            <h3>{{post.author}}</h3>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="blog-body">
-                    <div class="blog-title">
-                        <h1><a href="#">{{post.title}}</a></h1>
-                    </div>
-                    <div class="blog-summary">
-                        <p>{{post.content|slice:":120"}}</p>
-                    </div>
-                    <div class="blog-tags">
-                        <ul>
-                            <li><a href="#">css</a></li>
-                            <li><a href="#">web design</a></li>
-                            <li><a href="#">codepen</a></li>
-                            <li><a href="https://twitter.com/russbeye">twitter</a></li>
-                        </ul>
-                    </div>
-                    <a href="{% url 'fullpost' post.id %}">read more</a>
-                </div>
-        
-                <div class="blog-footer">
-                    <ul>
-                        <li class="published-date">published on {{post.created_on}}</li>
-                        <li class="comments">
-                            <a href="{% url 'fullpost' post.id %}"><svg class="icon-bubble">
-                                    <use xlink:href="#icon-bubble"></use>
-                                </svg><span class="numero">{{post.comment_set.all.count}}</span></a>
-                        </li>
-                        <li class="shares"><a href="">
-                                <form action="{% url 'like_post' post.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button type="submit" style="background-color: transparent; border: none;">
-                                        <svg class="icon-star">
-                                            <use xlink:href="#icon-star"></use>
-                                        </svg><span class="numero">{{post.like_set.all.count}}</span>
-                            </a>
-                            </button>
-                            </form>
-                        </li>
-                    </ul>
-                    <br>
+    <div class="blog-container">
+        <div class="blog-header">
+            <div class="blog-cover" style=" 
+            background: url('../media/{{post.image }}');
+            background-size: cover;
+            border-radius: 5px 5px 0 0;
+            height: 35rem;
+            box-shadow: inset rgba(0, 0, 0, 0.2) 0 64px 64px 16px;">
+                <div class="blog-author">
+                    <h3>{{post.author}}</h3>
                 </div>
             </div>
-        <!-- </div> -->
-        {% endfor %}
-    <!-- </div> -->
-    
-    {% else %}
-    <p>There are no post in our blog.</p>
-    {% endif %}
+        </div>
+
+        <div class="blog-body">
+            <div class="blog-title">
+                <h1><a href="#">{{post.title}}</a></h1>
+            </div>
+            <div class="blog-summary">
+                <p>{{post.content}}</p>
+            </div>
+            <div class="blog-tags">
+                <ul>
+                    <li><a href="#">css</a></li>
+                    <li><a href="#">web design</a></li>
+                    <li><a href="#">codepen</a></li>
+                    <li><a href="https://twitter.com/russbeye">twitter</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="blog-footer">
+            <ul>
+                <li class="published-date">published on {{post.created_on}}</li>
+                <li class="comments" onclick="">
+                    <a href="#"><svg class="icon-bubble">
+                            <use xlink:href="#icon-bubble"></use>
+                        </svg><span class="numero">{{post.comment_set.all.count}}</span></a>
+                </li>
+                <li class="shares"><a href="">
+                        <form action="{% url 'like_post' post.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary"
+                                style="background-color: transparent; border: none;">
+                                <svg class="icon-star">
+                                    <use xlink:href="#icon-star"></use>
+                                </svg><span class="numero">{{post.like_set.all.count}}</span>
+                    </a>
+                    </button>
+                    </form>
+                </li>
+            </ul>
+            <br>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <table>
+                    <input type="hidden" name="post" value="{{post.id}}">
+                    {{ comment_form|crispy }}
+                </table>
+                <input type="submit" class="btn btn-secondary" value="SUBMIT"><br>
+            </form>
+            <br><br>
+            <div>
+                {% if post.comment_set.all %}
+                {% for comment in post.comment_set.all%}
+
+                <p>posted by: {{comment.user}}</p>
+                <p>{{comment.content}}</p>
+                <hr>
+                <br>
+                {% endfor %}
+                {% else %}
+                <p>no comment yet</p>
+                {% endif %}
+            </div>
+            <div>
+            </div>
+        </div>
+
+    </div>
 
 
 
     <script type="text/javascript" src="//use.typekit.net/wtt0gtr.js"></script>
     <script type="text/javascript">try { Typekit.load(); } catch (e) { }</script>
-   
-    <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
-    <!-- BOOTSTRAP SCRIPTS  -->
-    <script src="{% static 'js/bootstrap.js' %}"></script>
-      <!-- CUSTOM SCRIPTS  -->
-    <script src="{% static 'js/custom.js' %}"></script>
+    <script
+        src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-1b93190375e9ccc259df3a57c1abc0e64599724ae30d7ea4c6877eb615f89387.js"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
 </body>
 
 </html>

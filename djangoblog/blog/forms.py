@@ -1,10 +1,11 @@
 from django import forms
-from .models import Post
+from .models import Comment, Post
+from django.core.exceptions import ValidationError
 
 
 # creating a form
 class Postform(forms.ModelForm):
-
+    
 	# create meta class
 	class Meta:
 		# specify model to be used
@@ -16,8 +17,10 @@ class Postform(forms.ModelForm):
 			"content",
             "image"
 		]
-class Updateform(forms.ModelForm):
 
+		
+class Updateform(forms.ModelForm):
+ 
 	# create meta class
 	class Meta:
 		# specify model to be used
@@ -28,4 +31,16 @@ class Updateform(forms.ModelForm):
 			"title",
 			"content",
             "image"
+		]
+
+class createComment(forms.ModelForm):
+
+	# create meta class
+	class Meta:
+		# specify model to be used
+		model = Comment
+
+		# specify fields to be used
+		fields = [
+			"content"
 		]

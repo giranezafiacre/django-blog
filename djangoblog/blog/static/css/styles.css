@@ -1,221 +1,241 @@
+body {
+            background: #e5ded8;
+            box-sizing: border-box;
+        }
+        .navbar {
+            transition: all 0.4s;
+        }
+        
+        .navbar .nav-link {
+            color: #fff;
+        }
+        
+        .navbar .nav-link:hover,
+        .navbar .nav-link:focus {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .navbar .navbar-brand {
+            color: #fff;
+        }
+        
+        
+        /* Change navbar styling on scroll */
+        .navbar.active {
+            background: #fff;
+            box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar.active .nav-link {
+            color: #555;
+        }
+        
+        .navbar.active .nav-link:hover,
+        .navbar.active .nav-link:focus {
+            color: #555;
+            text-decoration: none;
+        }
+        
+        .navbar.active .navbar-brand {
+            color: #555;
+        }
+        
+        
+        /* Change navbar styling on small viewports */
+        @media (max-width: 991.98px) {
+            .navbar {
+                background: #fff;
+            }
+        
+            .navbar .navbar-brand, .navbar .nav-link {
+                color: #555;
+            }
+        }
+        .navbar-fixed-top.scrolled {
+            background-color: #fff !important;
+            transition: background-color 200ms linear;
+          }
+        .blog-container {
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: rgba(0, 0, 0, 0.2) 0 4px 2px -2px;
+            font-family: "adelle-sans", sans-serif;
+            font-weight: 100;
+            margin: 48px auto;
+            width: 20rem;
+        }
 
-/*=============================================================
-    Authour URI: www.binarytheme.com
-    License: Commons Attribution 3.0
+        @media screen and (min-width: 480px) {
+            .blog-container {
+                width: 28rem;
+            }
+        }
 
-    http://creativecommons.org/licenses/by/3.0/
+        @media screen and (min-width: 767px) {
+            .blog-container {
+                width: 40rem;
+            }
+        }
 
-    100% Free To use For Personal And Commercial Use.
-    IN EXCHANGE JUST GIVE US CREDITS AND TELL YOUR FRIENDS ABOUT US
-   
-    ========================================================  */
+        @media screen and (min-width: 959px) {
+            .blog-container {
+                width: 50rem;
+            }
+        }
 
+        .blog-container a {
+            color: #4d4dff;
+            text-decoration: none;
+            transition: 0.25s ease;
+        }
 
+        .blog-container a:hover {
+            border-color: #ff4d4d;
+            color: #ff4d4d;
+        }
 
-/* =============================================================
-   GENERAL STYLES
- ============================================================ */
+        .blog-author,
+        .blog-author--no-cover {
+            margin: 0 auto;
+            padding-top: 0.125rem;
+            width: 80%;
+        }
 
- body {
-    font-family: 'Open Sans', sans-serif;
-    line-height:28px;
-   
-}
-.set-radius-zero {
-    border-radius:0px;
-    -moz-border-radius:0px;
-    -webkit-border-radius:0px;
-}
-.content-wrapper {
-    margin-top: 40px;
-    min-height:800px;
-    padding-bottom:90px;
-}
-.header-line {
-    font-weight:900;
-    padding-bottom:25px;
-    border-bottom:1px solid #eeeeee;
-    text-transform:uppercase;
-}
-.pad-botm {
-    padding-bottom:30px;
-}
+        .blog-author h3::before,
+        .blog-author--no-cover h3::before {
+            background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/17779/russ.jpeg");
+            background-size: cover;
+            border-radius: 50%;
+            content: " ";
+            display: inline-block;
+            height: 32px;
+            margin-right: 0.5rem;
+            position: relative;
+            top: 8px;
+            width: 32px;
+        }
 
+        .blog-author h3 {
+            color: #fff;
+            font-weight: 100;
+        }
 
-/* =============================================================
-   NAVBAR & MENU STYLES
- ============================================================ */
+        .blog-author--no-cover h3 {
+            color: #999999;
+            font-weight: 100;
+        }
 
-.right-div {
-    float: right; 
-    padding: 20px;
-}
-#menu-top a {
-    color:#000;
-    text-decoration:none;
-    font-weight:500;
-    padding: 25px 15px 25px 15px;
-    text-transform:uppercase;
+        .blog-body {
+            margin: 0 auto;
+            width: 80%;
+        }
 
-}
-.menu-section {
-    background-color: #f7f7f7;
-    border-bottom:5px solid #9170E4;
-    width:100%
-}
-.menu-top-active {
-    background-color:#eeeeee;
-}
-.navbar-inverse {
-background-color: #FFF;
-border-color: rgba(155, 153, 153, 0.23);
+        .video-body {
+            height: 100%;
+            width: 100%;
+        }
 
-}
+        .blog-title h1 a {
+            color: #333;
+            font-weight: 100;
+        }
 
-.navbar {
-    min-height: 90px;
-    margin-bottom: 0px;
-   
-}
-.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
-    border-color:transparent;
-}
-.navbar-toggle {
-background-color: black;
-border: 1px solid black;
-}
+        .blog-summary p {
+            color: #4d4d4d;
+        }
 
-    /* =============================================================
-   DASHBOARD STYLES
- ============================================================ */
+        .blog-tags ul {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            list-style: none;
+            padding-left: 0;
+        }
 
-.img-comments {
-   border: 3px double #e1e1e1;
-height: 60px;
+        .blog-tags li+li {
+            margin-left: 0.5rem;
+        }
 
-}
+        .blog-tags a {
+            border: 1px solid #999999;
+            border-radius: 3px;
+            color: #999999;
+            font-size: 0.75rem;
+            height: 1.5rem;
+            line-height: 1.5rem;
+            letter-spacing: 1px;
+            padding: 0 0.5rem;
+            text-align: center;
+            text-transform: uppercase;
+            white-space: nowrap;
+            width: 5rem;
+        }
 
-.chat-widget-main {
-    max-height:330px;
-    overflow:auto;
-}
+        .blog-footer {
+            border-top: 1px solid #e6e6e6;
+            margin: 0 auto;
+            padding-bottom: 0.125rem;
+            width: 80%;
+        }
 
-.slide-bdr {
-   border:5px solid #9170E4
-}
-.chat-widget-left:after {
-    top: 100%;
-    left: 10%;
-    border: solid transparent;
-    content: " ";
-    position: absolute;
-    border-top-color: #F70E62;
-    border-width: 15px;
-    margin-left: -15px;
-}
+        .blog-footer ul {
+            list-style: none;
+            display: flex;
+            flex: row wrap;
+            justify-content: flex-end;
+            padding-left: 0;
+        }
 
-.chat-widget-left {
-    width: 100%;
-    height: auto;
-    padding: 15px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    position: relative;
-    border: 1px solid #F70E62;
-    font-size:12px;
-}
-.chat-widget-right:after {
-    top: 100%;
-    right: 10%;
-    border: solid transparent;
-    content: " ";
-    position: absolute;
-    border-top-color: #5AA8CC;
-    border-width: 15px;
-    margin-left: -15px;
-}
+        .blog-footer li:first-child {
+            margin-right: auto;
+        }
 
-.chat-widget-right {
-    width: 100%;
-    height: auto;
-    padding: 15px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    position: relative;
-    border: 1px solid #5AA8CC;
-    font-size:12px;
-}
+        .blog-footer li+li {
+            margin-left: 0.5rem;
+        }
 
-.chat-widget-name-left {
-   color: #808080;
-    margin-top: 30px;
-    margin-left: 60px;
-    text-align:left;
-}
+        .blog-footer li {
+            color: #999999;
+            font-size: 0.75rem;
+            height: 1.5rem;
+            letter-spacing: 1px;
+            line-height: 1.5rem;
+            text-align: center;
+            text-transform: uppercase;
+            position: relative;
+            white-space: nowrap;
+        }
 
-    .img-left-chat {
-        border:3px double #e1e1e1;
-        float:left;
-        margin-right:30px;
-    }
-     .img-right-chat {
-        border:3px double #e1e1e1;
-        float:right;
-        margin-left:30px;
-    }
-     .chat-widget-main img-right {
-        border:3px double #e1e1e1;
-        float:left;
-    }
-.chat-widget-name-left h4 {
-    font-weight:normal;
-    font-size:11px;
-    
-}
-.chat-widget-name-left h5 {
-    font-weight:normal;
-    font-size:10px;
-}
-.chat-widget-name-right h4 {
-    font-weight:normal;
-    font-size:11px;
-}
-.chat-widget-name-right h5 {
-    font-weight:normal;
-    font-size:10px;
-}
-.chat-widget-name-right {
-    color: #808080;
-    margin-top: 40px;
-    margin-right: 60px;
-    text-align:right;
-}
+        .blog-footer li a {
+            color: #999999;
+        }
 
-.recent-users-sec img {
-    max-height:80px;
-    margin:15px;
-}
+        .comments {
+            margin-right: 1rem;
+        }
 
-.back-widget-set {
-    background-color:transparent;
-}
+        .published-date {
+            border: 1px solid #999999;
+            border-radius: 3px;
+            padding: 0 0.5rem;
+        }
 
-/* =============================================================
-   FOOTER SECTION STYLES
- ============================================================ */
-.footer-section {
-    padding:25px 50px 25px 50px;
-    color:#000;
-    font-size:13px;
-      background-color: #f7f7f7;
-      text-align:right;
-       border-top:5px solid #9170E4;
+        .numero {
+            position: relative;
+            top: -0.5rem;
+        }
 
-}
+        .icon-star,
+        .icon-bubble {
+            fill: #999999;
+            height: 24px;
+            margin-right: 0.5rem;
+            transition: 0.25s ease;
+            width: 24px;
+        }
 
-    .footer-section a, .footer-section a:hover {
-        color:#000;
-    }
-
+        .icon-star:hover,
+        .icon-bubble:hover {
+            fill: #ff4d4d;
+        }
