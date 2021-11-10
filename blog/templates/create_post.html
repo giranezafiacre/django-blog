@@ -6,12 +6,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>create the post</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
   <style>
     h1 {
       text-align: center;
-      color: #fff;
     }
 
     .form {
@@ -19,7 +21,7 @@
       flex-direction: column;
       margin-left: 15vw;
       margin-right: 15vw;
-      border-radius: 20px; 
+      border-radius: 20px;
     }
   </style>
 </head>
@@ -27,15 +29,17 @@
 <body>
   {% include 'header.html' %}
   {% load crispy_forms_tags %}
-  
-  <br> <br><br>
-  <div class='cover'>
+
+  <br> <br><br><br>
+  <div style="width: 70vw; margin-left: auto; margin-right: auto; background-color: #fff; border-radius: 10px;">
     <h1>Create a post</h1>
     <hr class="mt-0 mb-4">
     <form class='form' method="post" action="" enctype='multipart/form-data'>
-      {% csrf_token %}
-      {{ form |crispy }}
-      <input type="submit" class="btn btn-secondary" value="SUBMIT"><br>
+      <div style="display: flex; flex-direction: column; padding: 20px;">
+        {% csrf_token %}
+        {{ form |crispy }}
+        <input type="submit" class="btn btn-secondary" value="SUBMIT"><br>
+      </div>
     </form>
   </div>
 </body>
