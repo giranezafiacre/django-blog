@@ -25,12 +25,14 @@ def index(request):
 def create_post(request):
     context = {}
     form = Postform(request.POST, request.FILES)
-    print(form)
-    if form.is_valid():
-        form.instance.author = request.user
-        form.save()
-        response = redirect('/')
-        return response
+    if request.method =='POST':
+        if form.is_valid():
+            form.instance.author = request.user
+            form.save()
+            response = redirect('/')
+            return response
+        else:
+            form = Postform(request.POST, request.FILES)
     else:
         form = Postform()
 
@@ -67,16 +69,13 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def delete_post(request,pk):
-    if request.method=='POST':
-        if(Post.objects.filter(author=request.user)):
-            record=Post.objects.get(id=pk)
-            record.delete()
-            response = redirect('/dashboard')
-            return response
-        else:
-            return redirect('index')
+    if(Post.objects.filter(author=request.user)):
+        record=Post.objects.get(id=pk)
+        record.delete()
+        response = redirect('/dashboard')
+        return response
     else:
-        return redirect('dashboard')
+        return redirect('index')
 
 @login_required(login_url='login')
 def fullpost(request, id):

@@ -7,7 +7,7 @@ import datetime
 
 class Post(models.Model):
     title = models.CharField(max_length=200,null=False)
-    content = models.TextField(max_length=2000, help_text='Enter a content of the a post')
+    content = models.TextField(max_length=3000, help_text='Enter a content of the a post')
     image = models.ImageField(upload_to='uploads')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True,verbose_name='created_by')
     created_on = models.DateField(default=datetime.date.today)
