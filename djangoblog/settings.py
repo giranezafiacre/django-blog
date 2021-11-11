@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,7 @@ SECRET_KEY = 'django-insecure-b*r$sc34ok8#8kqw-lv7!eag8l3wuzx5vyygh!r2-!_16hawx1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-blog-fiacre.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -78,22 +79,26 @@ WSGI_APPLICATION = 'djangoblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+#         'NAME': 'blog',
+
+#         'USER': 'postgres',
+
+#         'PASSWORD': 'nyagatoma',
+
+#         'HOST': 'localhost',
+
+#         'PORT': '5432',
+
+#     }
+# }
+
 DATABASES = {
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': 'blog',
-
-        'USER': 'postgres',
-
-        'PASSWORD': 'nyagatoma',
-
-        'HOST': 'localhost',
-
-        'PORT': '5432',
-
-    }
+    'default': dj_database_url.config()
 }
 
 
