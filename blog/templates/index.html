@@ -37,7 +37,7 @@
         if (document.location.search.match(/type=embed/gi)) {
             window.parent.postMessage("resize", "*");
         }
-        
+
     </script>
 
 
@@ -64,70 +64,67 @@
     </svg>
     {% if posts %}
 
-    
-    
+
+
     <!-- <div class="row"> -->
-        {% for post in posts %}
-        <!-- <div class="col-4" style="width: 30vw;"> -->
-            <div class="blog-container">
-                <div class="blog-header">
-                    <div class="blog-cover" style=" 
+    {% for post in posts %}
+    <!-- <div class="col-4" style="width: 30vw;"> -->
+    <div class="blog-container">
+        <div class="blog-header">
+            <div class="blog-cover" style=" 
                     background: url('media/{{post.image }}');
                     background-size: cover;
                     border-radius: 5px 5px 0 0;
                     height: 35rem;
                     box-shadow: inset rgba(0, 0, 0, 0.2) 0 64px 64px 16px;">
-                        <div class="blog-author">
-                            <h3>{{post.author}}</h3>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="blog-body">
-                    <div class="blog-title">
-                        <h1><a href="#">{{post.title}}</a></h1>
-                    </div>
-                    <div class="blog-summary">
-                        <p>{{post.content|slice:":120"}}</p>
-                    </div>
-                    <div class="blog-tags">
-                        <ul>
-                            <li><a href="#">css</a></li>
-                            <li><a href="#">web design</a></li>
-                            <li><a href="#">codepen</a></li>
-                            <li><a href="https://twitter.com/russbeye">twitter</a></li>
-                        </ul>
-                    </div>
-                    <a href="{% url 'fullpost' post.id %}">read more</a>
-                </div>
-        
-                <div class="blog-footer">
-                    <ul>
-                        <li class="published-date">published on {{post.created_on}}</li>
-                        <li class="comments">
-                            <a href="{% url 'fullpost' post.id %}"><svg class="icon-bubble">
-                                    <use xlink:href="#icon-bubble"></use>
-                                </svg><span class="numero">{{post.comment_set.all.count}}</span></a>
-                        </li>
-                        <li class="shares"><a href="">
-                                <form action="{% url 'like_post' post.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button type="submit" style="background-color: transparent; border: none;">
-                                        <svg class="icon-star">
-                                            <use xlink:href="#icon-star"></use>
-                                        </svg><span class="numero">{{post.like_set.all.count}}</span>
-                            </a>
-                            </button>
-                            </form>
-                        </li>
-                    </ul>
-                    <br>
+                <div class="blog-author">
+                    <h3>{{post.author}}</h3>
                 </div>
             </div>
-        <!-- </div> -->
-        {% endfor %}
+        </div>
+
+        <div class="blog-body">
+            <div class="blog-title">
+                <h1><a href="#">{{post.title}}</a></h1>
+            </div>
+            <div class="blog-summary">
+                <p>{{post.content|slice:":120"}}</p>
+            </div>
+            <div class="blog-tags">
+                <ul>
+                    <li><a href="#">css</a></li>
+                    <li><a href="#">web design</a></li>
+                    <li><a href="#">codepen</a></li>
+                    <li><a href="https://twitter.com/russbeye">twitter</a></li>
+                </ul>
+            </div>
+            <a href="{% url 'fullpost' post.id %}">read more</a>
+        </div>
+
+        <div class="blog-footer">
+            <ul>
+                <li class="published-date">published on {{post.created_on}}</li>
+                <li class="comments">
+                    <a href="{% url 'fullpost' post.id %}"><svg class="icon-bubble">
+                            <use xlink:href="#icon-bubble"></use>
+                        </svg><span class="numero">{{post.comment_set.all.count}}</span></a>
+                </li>
+                <li class="shares">
+                    <a href="{% url 'like_post' post.id %}">
+                                <svg class="icon-star">
+                                    <use xlink:href="#icon-star"></use>
+                                </svg><span class="numero">{{post.like_set.all.count}}</span>
+                    </a>
+
+                </li>
+            </ul>
+            <br>
+        </div>
+    </div>
     <!-- </div> -->
-    
+    {% endfor %}
+    <!-- </div> -->
+
     {% else %}
     <br><br><br><br>
     <h1 style="text-align: center;">There is no post in our blog.</h1>
@@ -137,11 +134,11 @@
 
     <script type="text/javascript" src="//use.typekit.net/wtt0gtr.js"></script>
     <script type="text/javascript">try { Typekit.load(); } catch (e) { }</script>
-   
+
     <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
     <!-- BOOTSTRAP SCRIPTS  -->
     <script src="{% static 'js/bootstrap.js' %}"></script>
-      <!-- CUSTOM SCRIPTS  -->
+    <!-- CUSTOM SCRIPTS  -->
     <script src="{% static 'js/custom.js' %}"></script>
 </body>
 

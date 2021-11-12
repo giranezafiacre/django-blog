@@ -66,7 +66,7 @@
     <div class="blog-container">
         <div class="blog-header">
             <div class="blog-cover" style=" 
-            background: url('../media/{{post.image }}');
+            background: url('../../media/{{post.image }}');
             background-size: cover;
             border-radius: 5px 5px 0 0;
             height: 35rem;
@@ -98,58 +98,60 @@
             <ul>
                 <li class="published-date">published on {{post.created_on}}</li>
                 <li class="comments" onclick="">
-                    <a href="">
-                        <form action="{% url 'like_post' post.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" style="background-color: transparent; border: none;">
-                                <svg class="icon-bubble">
-                                    <use xlink:href="#icon-bubble"></use>
-                                </svg><span class="numero">{{post.comment_set.all.count}}</span>
-                        </form>
-                    </a>
+                    <a href="{% url 'fullpost' post.id %}"><svg class="icon-bubble">
+                            <use xlink:href="#icon-bubble"></use>
+                        </svg><span class="numero">{{post.comment_set.all.count}}</span></a>
                 </li>
-                <li class="shares"><a href="">
-                        <a href="{% url 'like_post' post.id %}">
-                            <svg class="icon-star">
-                                <use xlink:href="#icon-star"></use>
-                            </svg><span class="numero">{{post.like_set.all.count}}</span>
-                        </a>
+                <li class="shares"> <a href="{% url 'like_post' post.id %}">
+                        <svg class="icon-star">
+                            <use xlink:href="#icon-star"></use>
+                        </svg><span class="numero">{{post.like_set.all.count}}</span>
+                    </a>
                 </li>
             </ul>
             <br>
 
-            <form action="{% url 'fullpost' post.id %}" method="post">
-                {% csrf_token %}
-                <table>
-                    <input type="hidden" name="post" value="{{post.id}}">
-                    {{ comment_form|crispy }}
-                </table>
-                <input type="submit" class="btn btn-secondary" value="SUBMIT"><br>
-            </form>
-            <br><br>
             <div>
-                {% if post.comment_set.all %}
-                {% for comment in post.comment_set.all%}
-
-                <p>posted by: {{comment.user}}</p>
-                <p>{{comment.content}} <br>
+                <div>
+                    {% for comment in post.comment_set.all%}
+                    {% if comment.id == choosenComment.id %}
+                    <p>posted by: {{comment.user}}</p>
+                    <p>{{comment.content}} <br>
+                    <div style="margin-left: 5vw;">
+                        {% if comment.commentreply_set.all %}
+                        {% for com in comment.commentreply_set.all%}
+                        <p>replied by: {{com.user}}</p>
+                        <p>{{com.content}}</p>
+                        {% if com.user == user %}
+                        <a href="{% url 'editreply' post.id  comment.id com.id %}">edit</a> &nbsp; &nbsp;
+                        <a href="{% url 'deletereply' post.id  comment.id com.id %}">delete</a>
+                        {% endif %}
+                        <hr>
+                        {%endfor%}
+                        {% endif %}
+                        <form action="{% url 'comments' post.id  comment.id %}" method="post">
+                            {% csrf_token %}
+                            <table>
+                                {{ comment_form|crispy }}
+                            </table>
+                            <input type="submit" class="btn btn-secondary" value="SUBMIT"><br>
+                        </form>
+                    </div>
+                    <br><br>
+                    <hr>
+                    {%else%}
+                    <p>posted by: {{comment.user}}</p>
+                    <p>{{comment.content}}</p> <br>
                     {% if comment.commentreply_set.all %}
                     <a href="{% url 'comments' post.id  comment.id %}">show replies</a>
                     {% else %}
                     <a href="{% url 'comments' post.id  comment.id %}">reply</a>
                     {% endif %}
-                    &nbsp; &nbsp;
-                    {% if comment.user == user %}
-                    <a href="{% url 'editcomment' post.id  comment.id %}">edit</a>
-                    &nbsp; &nbsp;
-                    <a href="{% url 'deletecomment' post.id  comment.id %}">delete</a>
-                    {% endif %}
                     <hr>
                     <br>
+                    {%endif%}
                     {% endfor %}
-                    {% else %}
-                <p>no comment yet</p>
-                {% endif %}
+                </div>
             </div>
         </div>
 

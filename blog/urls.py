@@ -12,4 +12,9 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('fullpost/<int:id>/<int:commentid>', views.commentReply, name='comments'),
+    path('editcomment/<int:id>/<int:commentid>', views.editComment, name='editcomment'),
+    path('deletecomment/<int:id>/<int:commentid>', views.deleteComment, name='deletecomment'),
+    path('editreply/<int:id>/<int:commentid>/<int:replyid>', views.editReply, name='editreply'),
+    path('deletereply/<int:id>/<int:commentid>/<int:replyid>', views.deleteReply, name='deletereply'),
 ]

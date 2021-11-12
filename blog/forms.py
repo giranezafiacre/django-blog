@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comment, Post
+from .models import Comment, CommentReply, Post
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models import User
@@ -57,3 +57,15 @@ class LoginForm(AuthenticationForm):
 	class Meta:
 		model=User
 		fields=['username','password']
+
+class commentReplyForm(forms.ModelForm):
+
+	# create meta class
+	class Meta:
+		# specify model to be used
+		model = CommentReply
+
+		# specify fields to be used
+		fields = [
+			"content"
+		]
