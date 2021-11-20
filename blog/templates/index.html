@@ -39,7 +39,17 @@
         }
 
     </script>
-
+    <script>
+        function like(id) {
+            document.getElementById(id).innerHTML = "";
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                document.getElementById(id).innerHTML = this.responseText;
+            }
+            xmlhttp.open("GET", "/like_post/" + id, true);
+            xmlhttp.send();
+        }
+    </script>
 
 </head>
 
@@ -65,10 +75,7 @@
     {% if posts %}
 
 
-
-    <!-- <div class="row"> -->
     {% for post in posts %}
-    <!-- <div class="col-4" style="width: 30vw;"> -->
     <div class="blog-container">
         <div class="blog-header">
             <div class="blog-cover" style=" 
@@ -109,29 +116,35 @@
                             <use xlink:href="#icon-bubble"></use>
                         </svg><span class="numero">{{post.comment_set.all.count}}</span></a>
                 </li>
-                <li class="shares">
-                    <a href="{% url 'like_post' post.id %}">
-                                <svg class="icon-star">
-                                    <use xlink:href="#icon-star"></use>
-                                </svg><span class="numero">{{post.like_set.all.count}}</span>
-                    </a>
 
+                <li class="shares" style="cursor: pointer;" onclick="like('{{post.id}}')" id="{{post.id}}">
+                    {% for like in likes %}
+                    {% if like.post == post %}
+                    <svg class="icon-star" style="fill: blue;">
+                        <use xlink:href="#icon-star"></use>
+                    </svg><span class="numero" style="color: blue;">{{post.like_set.all.count}}</span>
+
+                    {% else %}
+                    <svg class="icon-star" style="fill: #999999;">
+                        <use xlink:href="#icon-star"></use>
+                    </svg><span class="numero" style="color: #999999;">{{post.like_set.all.count}}</span>
+                    {% endif %}
+                    {% empty %}
+                    <svg class="icon-star" style="fill: #999999;">
+                        <use xlink:href="#icon-star"></use>
+                    </svg><span class="numero" style="color: #999999;">{{post.like_set.all.count}}</span>
+                    {% endfor %}
                 </li>
             </ul>
             <br>
         </div>
     </div>
-    <!-- </div> -->
     {% endfor %}
-    <!-- </div> -->
 
     {% else %}
     <br><br><br><br>
     <h1 style="text-align: center;">There is no post in our blog.</h1>
     {% endif %}
-
-
-
     <script type="text/javascript" src="//use.typekit.net/wtt0gtr.js"></script>
     <script type="text/javascript">try { Typekit.load(); } catch (e) { }</script>
 

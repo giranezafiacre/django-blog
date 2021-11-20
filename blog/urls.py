@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -12,9 +12,39 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path('fullpost/<int:id>/<int:commentid>', views.commentReply, name='comments'),
-    path('editcomment/<int:id>/<int:commentid>', views.editComment, name='editcomment'),
-    path('deletecomment/<int:id>/<int:commentid>', views.deleteComment, name='deletecomment'),
-    path('editreply/<int:id>/<int:commentid>/<int:replyid>', views.editReply, name='editreply'),
-    path('deletereply/<int:id>/<int:commentid>/<int:replyid>', views.deleteReply, name='deletereply'),
+    path('fullpost/<int:id>/<int:commentid>',
+         views.commentReply, name='comments'),
+    path('editcomment/<int:id>/<int:commentid>',
+         views.editComment, name='editcomment'),
+    path('deletecomment/<int:id>/<int:commentid>',
+         views.deleteComment, name='deletecomment'),
+    path('editreply/<int:id>/<int:commentid>/<int:replyid>',
+         views.editReply, name='editreply'),
+    path('deletereply/<int:id>/<int:commentid>/<int:replyid>',
+         views.deleteReply, name='deletereply'),
+]
+urlpatterns += [
+    path('v1/', views.ListpostView.as_view(), name='listposts'),
+    path('v1/post/<int:pk>/', views.PostDetailAPIView.as_view(), name='detail-post'),
+    path('v1/post/', views.CreatePostAPIView.as_view(), name='create-post'),
+    path('v1/delete/post/<int:pk>/',
+         views.DeletePostAPIView.as_view(), name='delete-post'),
+    path('v1/post/<int:pk>/comments/',
+         views.ListCommentView.as_view(), name='viewComments'),
+    path('v1/post/<int:pk>/like/',
+         views.LikePostAPIView.as_view(), name='like-post'),
+    path('v1/post/<int:postid>/comment/',
+         views.CreateCommentAPIView.as_view(), name='createComments'),
+    path('v1/comment/<int:pk>', views.CommentDetailAPIView.as_view(),
+         name='detail-comment'),
+    path('v1/delete/comment/<int:pk>/',
+         views.DeleteCommentAPIView.as_view(), name='delete-comment'),
+    path('auth/', include('rest_auth.urls')),
+    path('auth/register/', include('rest_auth.registration.urls')),
+]
+urlpatterns += [
+    path('v2/', views.GPostListAPIView.as_view(), name='generic_postList'),
+    path('v2/post/<int:pk>/', views.GPostDetailAPIView.as_view(),
+         name='generic-detail-post'),
+    path('v2/post/', views.GPostCreateAPIView.as_view(), name='create-post'),
 ]

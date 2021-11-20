@@ -1,12 +1,16 @@
 import time
 from django.conf import settings
 from django.shortcuts import render
+from blog.permissions import IsOwnerOrReadOnly
+
+from blog.serializer import CommentSerializer, DisplayPostSerializer, LoginSerializer, PostSerializer
 from .models import CommentReply, Like, Post, Comment
 from .forms import CreateUserForm, LoginForm, Postform, Updateform, commentReplyForm, createComment
-from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required,user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test
+from rest_framework import views, response, decorators, parsers, permissions, authentication,filters,generics,status
 
 
 def logout_required(function=None, logout_url='index'):
@@ -23,8 +27,14 @@ def index(request):
     """View function for home page of site."""
     context={}
     posts = Post.objects.all()
+    # for post in posts:
+    #     print('hi')
+    likes=Like.objects.filter(user=request.user)
+    if likes:
+        print('hi ',likes)
     context = {
         'posts': posts,
+        'likes':likes
     }
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
@@ -106,17 +116,21 @@ def fullpost(request, id):
 def like_post(request, id):
     post = Post.objects.get(id=id)
     checkuser = Like.objects.filter(user=request.user,post=post)
+    liked=False
     if not checkuser:
         Like.objects.create(
             post=post,
             user=request.user)
-        print('done')
+        liked=True
     else:
         checkuser.delete()
-        print('not really')
-    response = redirect('/')
-    return response
-    
+        liked=False
+    context={
+        'likes':Like.objects.filter(post=post).count(),
+        'liked':liked
+    }
+    return render(request,'like.html',context=context)
+
 def register(request):
     form = CreateUserForm(request.POST or None)
     if form.is_valid():
@@ -232,3 +246,188 @@ def deleteReply(request, id,commentid, replyid):
         return redirect('comments',id=id,commentid=commentid)
   else:
        return redirect('comments',id=id,commentid=commentid)
+##################################################################
+
+
+
+
+'''class based views'''
+class ListpostView(views.APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        posts = Post.objects.all()
+        content=[]
+        for post in posts:
+            print(post.author)
+            postAppend={}
+            if post.author:
+               postAppend['author']=post.author.username
+            postAppend['title']=post.title
+            postAppend['content']=post.content
+            comments=[]
+            for comment in Comment.objects.filter(post=post):
+                commentfd={}
+                commentfd['user']=comment.user.username
+                commentfd['content']=comment.content
+                comments.append(commentfd)
+            postAppend['comment']=comments
+            postAppend['likes']=Like.objects.filter(post=post).count()
+            content.append(postAppend)
+        print(content)
+        # serializer = PostSerializer(posts, many=True)
+        return response.Response(content)
+
+
+class PostDetailAPIView(views.APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        post = get_object_or_404(Post, id=pk)
+        serializer = PostSerializer(post, many=False)
+        return response.Response(serializer.data)
+
+    def put(self, request, pk):
+        instance = get_object_or_404(Post, id=pk)
+        if(instance.author==request.user):
+            serializer = PostSerializer(instance=instance, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+            return response.Response(serializer.data)
+        else:
+            return response.Response('not authorized')
+
+
+@decorators.parser_classes((parsers.MultiPartParser, ))
+class CreatePostAPIView(views.APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        request.data['author']=request.user.id
+        print(request.data)
+        serializer = PostSerializer(data=request.data)
+        # serializer.author = [request.user]
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(serializer.data)
+        
+
+class DeletePostAPIView(views.APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        record = get_object_or_404(Post, id=pk)
+        if(record and record.author==request.user):
+            record.delete()
+            return response.Response({"message": "success"})
+        else:
+            return response.Response({"error":"record not found or not authorized"})
+
+class LikePostAPIView(views.APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request, pk):
+        post = get_object_or_404(Post, id=pk)
+        print(post)
+        checkuser = Like.objects.filter(user=request.user,post=post)
+        if not checkuser:
+            Like.objects.create(
+                post=post,
+                user=request.user)
+        else:
+            checkuser.delete()
+        return response.Response({"likes":Like.objects.filter(post=post).count()})
+
+# comment API
+class ListCommentView(views.APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        instance = get_object_or_404(Post, id=pk)
+        comments = Comment.objects.filter(post=instance)
+        serializer = CommentSerializer(comments, many=True)
+        return response.Response(serializer.data)
+
+
+class CommentDetailAPIView(views.APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        post = get_object_or_404(Comment, id=pk)
+        serializer = CommentSerializer(post, many=False)
+        return response.Response(serializer.data)
+
+    def put(self, request, pk):
+        instance = get_object_or_404(Comment, id=pk)
+        if(instance.user==request.user):
+            serializer = CommentSerializer(instance=instance, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+            return response.Response(serializer.data)
+        else:
+            return response.Response('not authorized')
+
+
+class CreateCommentAPIView(views.APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request,postid):
+        request.data['user']=request.user.id
+        instance = get_object_or_404(Post, id=postid)
+        request.data['post']=instance.id
+        print(request.data)
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(serializer.data)
+        
+
+class DeleteCommentAPIView(views.APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        record = get_object_or_404(Comment, id=pk)
+        if(record.user==request.user):
+            record.delete()
+            return response.Response({"message": "success"})
+        else:
+            return response.Response({"error":"not authorized"})
+
+
+
+'''generic views'''
+class GPostListAPIView(generics.ListAPIView):
+    """list of all post created by user"""
+    queryset = Post.objects.all()
+    serializer_class = DisplayPostSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['author__username','title']
+
+    def get_queryset(self):
+        return self.queryset.filter(author=self.request.user.id)
+
+
+
+class GPostCreateAPIView(generics.CreateAPIView):
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def perform_create(self,serializer):
+        serializer.save(author=self.request.user)
+
+class GPostDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes=[IsOwnerOrReadOnly]
+    queryset = Post.objects.all()
+    serializer_class = DisplayPostSerializer
+    lookup_field ='id'
+    lookup_url_kwarg='pk'
